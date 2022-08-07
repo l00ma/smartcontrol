@@ -1,0 +1,606 @@
+/* site css 
+icons meteo: https://github.com/erikflowers/weather-icons
+*/
+
+body {
+ font-family: Trebuchet, Arial, sans-serif;
+ color: #727272;
+ font-size: 0.9em;
+}
+
+#page_welcome {
+ font-family: Trebuchet, Arial, sans-serif;
+ color: #727272;
+ font-size: 0.9em;
+ background-image: url(images/raspberry_fond_light.jpg);
+ background-attachment: fixed;
+ background-repeat: no-repeat;
+ background-position: 50% 50%;
+}
+
+/*erreur*/
+.error { 
+ color: red;
+}
+
+header {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 30px;
+ background: #f7f7f7;
+ border-bottom: 1px solid #dcdcdc;
+ z-index: 2;
+}
+
+#menu_haut {
+ position: fixed;
+ right: 0;
+ margin-right: 3px;
+}
+
+#bar{
+ position: fixed;
+ left: 250px;
+}
+
+meter {
+ width: 155px;
+ height: 22px;
+ border-radius: 3px;
+}
+
+/* Style de la barre pour Firefox*/
+meter::-moz-meter-bar {
+ border-radius:3px;
+ box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 
+        0 -1px 0 rgba(0,0,0,.8) inset,
+        0 0 2px black;
+}
+
+.meter_bas {
+ position: relative;
+ top: 5px;
+ font-size: 0.7em;
+}
+
+#logo {
+ position: fixed;
+ left: 0;
+ margin-left: 10px;
+ font-size: 25px;
+ font-weight: bold;
+ opacity: 0.8;
+}
+
+#logo img {
+ position: relative;
+ top: 2px;
+}
+
+div #cadre_foreground {
+ position: relative;
+}
+
+div .foreground {
+ position: fixed;
+ top: 0;
+ right: 0;
+ bottom: 0;
+ left: 0;
+ opacity: .7;
+ background: #000000;
+ background: rgb(145, 145, 145) url(images/spinner_126.gif) no-repeat center center;
+} 
+
+* [id^='but_'], aside, nav{
+ position: relative;
+ top: 2px;
+ -moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+ -webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+ box-shadow: inset 0px 1px 0px 0px #ffffff;
+ background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+ background: -moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+ background-color: #ededed;
+ text-indent: 0;
+ border: 1px solid #dcdcdc;
+ display: inline-block;
+ color: #777777;
+ font-size: 10px;
+ font-weight: bold;
+ height: 25px;
+ text-decoration: none;
+ text-align: center;
+ text-shadow: 1px 1px 0px #ffffff;
+ -webkit-border-top-left-radius: 5px;
+ -moz-border-radius-topleft: 5px;
+ border-top-left-radius: 5px;
+ -webkit-border-top-right-radius: 5px;
+ -moz-border-radius-topright: 5px;
+ border-top-right-radius: 5px;
+ -webkit-border-bottom-right-radius: 5px;
+ -moz-border-radius-bottomright: 5px;
+ border-bottom-right-radius: 5px;
+ -webkit-border-bottom-left-radius: 5px;
+ -moz-border-radius-bottomleft: 5px;
+ border-bottom-left-radius: 5px;
+}
+
+*[id^='but_']:hover {
+ background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+ background: -moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+ background-color: #dfdfdf;
+}
+
+*[id^='but_']:active  {
+ position: relative;
+ top: 1px;
+}
+
+aside {
+ position: absolute;
+ top: 60px;
+ right: 5px;
+ width: auto;
+ height: auto;
+ padding: 5px 15px 5px 15px;
+ font-weight: normal;
+ opacity: 0.8;
+}
+
+nav {
+ position: absolute;
+ top: 60px;
+ left: 5px;
+ width: auto;
+ height: auto;
+ padding: 5px 15px 5px 15px;
+ font-weight: normal;
+ font-size: 1em;
+ text-align: left;
+ opacity: 0.8;
+}
+
+nav h1 {
+ font-size: 2.3em;
+ text-align: center;
+}
+
+nav p {
+ font-size: 1.3em;
+}
+
+a:link, a:visited {
+ color: #727272;
+ text-decoration: none;
+}
+
+a:hover, a:active {
+ color: #727272;
+ text-decoration: underline;
+}
+
+#tableau {
+ margin: auto;
+ width: 90%;
+}
+
+#myTabs {
+ width: 500px;
+}
+
+#but_connexion, #but_modifier {
+ font-size: 16px;
+ height: 30px;
+ width: 120px;
+}
+
+#form_connexion, #form_modifier {
+ position: relative;
+ margin-left: auto;
+ margin-right: auto;
+ background: #f7f7f7;
+ border: 1px solid #dcdcdc;
+ padding: 20px;
+ width: 350px;
+}
+
+#form_connexion {
+ top: 100px;
+}
+
+#form_mouv {
+margin-left: auto;
+margin-right: auto;
+background-color: #f7f7f7; 
+border: 1px solid #dcdcdc;
+padding: 10px;
+width: 480px;
+-webkit-border-top-left-radius: 7px;
+-moz-border-radius-topleft: 7px;
+border-top-left-radius: 7px;
+-webkit-border-top-right-radius: 7px;
+-moz-border-radius-topright: 7px;
+border-top-right-radius: 7px;
+-webkit-border-bottom-right-radius: 7px;
+-moz-border-radius-bottomright: 7px;
+border-bottom-right-radius: 7px;
+-webkit-border-bottom-left-radius: 7px;
+-moz-border-radius-bottomleft: 7px;
+border-bottom-left-radius: 7px;
+}
+
+#form_connexion td, #form_modifier td{ 
+ vertical-align: text-bottom;
+}
+
+#form_connexion p, #form_modifier p {
+ text-align: center;	
+}
+
+#connect, #deconnect{
+ font-size: 0.6em;
+ font-weight: bold;
+ line-height: 20px;
+}
+
+#connect {
+ background: #c9f7b8;
+}
+
+#deconnect {
+ background: #ffe4e4;
+}
+
+#refresh {
+ width: 50px;
+}
+
+#form_mouv td {
+ height: 50px;
+}
+
+#container_live {
+ width: 768px; /*768px = largeur de la video dans motion*/
+ margin-left: auto;
+ margin-right: auto;
+}
+
+#container_mouv_temp {
+margin-left: auto;
+margin-right: auto;
+width: 80%; 
+height: 400px;
+}
+
+#container_led1, #container_led2, #container_led3 {
+ width: 426px; 
+ height: 150px; 
+ position: relative;
+ font: bold 10px;
+ color: #999999; 
+ padding: 10px 20px 0; 
+ background: #f7f7f7; 
+ border: 1px solid #dcdcdc; 
+ border-radius: 6px;
+}
+
+#container_led2 {
+ height: 170px; 
+}
+
+#container_led1 label, #container_led2 label, #container_led3 label {
+ float: left;
+ text-align: right; 
+ margin: 0 30px 16px 0; 
+ clear: left; 
+}
+
+#container_led1 #container_led2 #outputLabel { 
+ margin: 0 10px 15px 0; 
+}
+
+#colorBox { 
+ width: 104px; 
+ height: 104px; 
+ float: right; 
+ margin: -140px 0 0 0; 
+ background: #ffffff;
+ border: 1px solid #999999;
+ border-radius: 6px;
+}
+
+#table_led_list_timer th, #myTabs td {
+ vertical-align: top;
+ text-align: center;
+}
+
+#table_led1, #table_led3 {
+ width: 70%;
+}
+
+#table_led2 {
+ width: 100%;
+}
+ 
+#list-timer {
+ width: 180px; 
+ height: 45px; 
+ position: relative;
+ color: #999999; 
+ background: #f7f7f7; 
+ border: 1px solid #dcdcdc;
+ border-radius: 6px;
+}
+
+#table_led_list_timer {
+ width: 100%;
+ font-size: 0.7em;
+}
+
+#table_led_list_timer #email {
+ position: relative;
+ top: -4px;
+}
+
+#icon_eraser {
+ position: relative;
+ top: -2px;
+ height: 18px;
+}
+
+.glowing-border {
+ height: 20px;
+ width: 150px;
+ border: 2px solid #999999;
+}
+.glowing-border:focus { 
+ outline: none;
+ border-color: #999999;
+ box-shadow: 0 0 10px #999999;
+}
+
+.glowing-border , #form_connexion, #form_modifier, #connect, #deconnect {
+ -webkit-border-top-left-radius: 7px;
+ -moz-border-radius-topleft: 7px;
+ border-top-left-radius: 7px;
+ -webkit-border-top-right-radius: 7px;
+ -moz-border-radius-topright: 7px;
+ border-top-right-radius: 7px;
+ -webkit-border-bottom-right-radius: 7px;
+ -moz-border-radius-bottomright: 7px;
+ border-bottom-right-radius: 7px;
+ -webkit-border-bottom-left-radius: 7px;
+ -moz-border-radius-bottomleft: 7px;
+ border-bottom-left-radius: 7px;
+}
+
+.tableau_meteo
+{
+ width: 100%;
+ padding-top: 10px;
+ border: 1px solid #dcdcdc;
+}
+
+.meteo_actuelle {
+ position: relative;
+ top: 8px;
+}
+
+#tab_donnees_live {
+ width: 100%;
+ border: 1px solid #dcdcdc;
+ text-align: right;
+ vertical-align: bottom;	
+}
+
+.tab_gauche, .wi-sunrise, .wi-sunset {
+ font-size: 18px;
+}
+
+.tab_gauche {
+ position: relative;
+ left: 20px;
+}
+
+.tableau_meteo th {
+ vertical-align: bottom;
+}
+
+.icone_meteo
+{
+ font-size: 62px;
+ color: #bb1142;
+}
+
+.horloge_heure
+{
+ font-size: 42px;
+}
+
+.horloge_date
+{
+ font-size: 25px;
+}
+
+.donnees_meteo
+{
+ font-size: 24px;
+}
+
+.gadget_allume
+{
+ padding: 2px 50px 2px 50px;
+ background: #c9f7b8;
+}
+
+.alerte_allume
+{
+ font-size: 14px;
+ padding: 2px 42px 2px 42px;
+ background: #ffe4e4;
+}
+
+.alerte_allume, .gadget_allume, .tableau_meteo
+{
+ -webkit-border-top-left-radius: 5px;
+ -moz-border-radius-topleft: 5px;
+ border-top-left-radius: 5px;
+ -webkit-border-top-right-radius: 5px;
+ -moz-border-radius-topright: 5px;
+ border-top-right-radius: 5px;
+ -webkit-border-bottom-right-radius: 5px;
+ -moz-border-radius-bottomright: 5px;
+ border-bottom-right-radius: 5px;
+ -webkit-border-bottom-left-radius: 5px;
+ -moz-border-radius-bottomleft: 5px;
+ border-bottom-left-radius: 5px;
+}
+
+.video_select {
+ margin-left: 138px;
+}
+
+.nom {
+ position: relative;
+ top: -4px;
+ font-size: 0.7em;
+}
+
+.ui-slider { 
+ width: 240px; 
+ float: left;
+}
+
+.ui-slider-handle {
+ width: 15px;
+ height: 27px; 
+}
+
+/* boutons effets */
+input[type=radio].radio-box {
+ position: absolute; 
+ z-index: -1000; 
+ left: -1000px; 
+ overflow: hidden;
+ clip: rect(0 0 0 0); 
+ height: 1px; 
+ width: 1px; 
+ margin: -1px; 
+ padding: 0; 
+ border: 0;
+}
+
+input[type=radio].radio-box + label.radio-label {
+ padding-left: 21px;
+ height: 16px; 
+ display: inline-block;
+ line-height: 16px;
+ background-repeat: no-repeat;
+ background-position: 0 0;
+ font-size: 16px;
+ vertical-align: middle;
+ cursor: pointer;
+}
+
+input[type=radio].radio-box:checked + label.radio-label {
+ background-position: 0 -16px;
+}
+
+label.radio-label {
+ background-image:url("images/radio.png");
+ -webkit-touch-callout: none;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+}
+
+.middle_button {
+ display: inline-block;
+ margin-top: -15px;
+}
+
+.enr_switch , .alrt_switch, .onoffswitch{
+ position: relative; 
+ width: 70px;
+ -webkit-user-select: none; 
+ -moz-user-select: none; 
+ -ms-user-select: none;
+}
+
+.enr_switch-checkbox, .alrt_switch-checkbox, .onoffswitch-checkbox {
+ display: none;
+}
+
+.enr_switch-label, .alrt_switch-label, .onoffswitch-label {
+ display: block;
+ margin: 30px 0 0 0;
+ overflow: hidden; 
+ cursor: pointer;
+ border: 2px solid #999999; 
+ border-radius: 6px;
+}
+
+.enr_switch-inner, .alrt_switch-inner, .onoffswitch-inner  {
+ display: block; 
+ width: 200%; 
+ margin-left: -100%;
+ transition: margin 0.3s ease-in 0s;
+}
+
+.enr_switch-inner:before, .enr_switch-inner:after, .alrt_switch-inner:before, .alrt_switch-inner:after, .onoffswitch-inner:before, .onoffswitch-inner:after {
+ display: block; 
+ float: left; 
+ width: 50%; 
+ height: 18px; 
+ padding: 0; 
+ line-height: 18px;
+ font-size: 15px; 
+ color: white;
+ font-family: Trebuchet, Arial, sans-serif;
+ font-weight: bold;
+ box-sizing: border-box;
+}
+
+.enr_switch-inner:before, .alrt_switch-inner:before, .onoffswitch-inner:before {
+ content: "ON";
+ padding-left: 7px;
+ background-color: #f2efef; 
+ color: #999999;
+}
+
+.enr_switch-inner:after, .alrt_switch-inner:after, .onoffswitch-inner:after {
+ content: "OFF";
+ padding-right: 7px;
+ background-color: #f2efef; 
+ color: #999999;
+ text-align: right;
+}
+
+.enr_switch-switch, .alrt_switch-switch, .onoffswitch-switch {
+ display: block; 
+ width: 24px; 
+ margin: -3px;
+ background: #a1a1a1 url("images/fondOff.png") 50% 50%;
+ position: absolute; 
+ top: 0; 
+ bottom: 0;
+ right: 48px;
+ border: 1px solid #999999; 
+ border-radius: 6px;
+ transition: all 0.3s ease-in 0s; 
+}
+
+.enr_switch-checkbox:checked + .enr_switch-label .enr_switch-inner, .alrt_switch-checkbox:checked + .alrt_switch-label .alrt_switch-inner, .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+ margin-left: 0;
+}
+
+.enr_switch-checkbox:checked + .enr_switch-label .enr_switch-switch, .alrt_switch-checkbox:checked + .alrt_switch-label .alrt_switch-switch, .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+ right: 0px; 
+ background: #78e028 url("images/fondOn.png") 50% 50%; 
+}

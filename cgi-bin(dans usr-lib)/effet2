@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Time::HiRes qw( usleep );
+use AppConfig qw(:expand :argcount);
+
+#Initialisation de la configuration
+my $config = AppConfig->new("gpio_red"    => {ARGCOUNT => ARGCOUNT_ONE},
+							"gpio_green"       	=> {ARGCOUNT => ARGCOUNT_ONE},
+                            "gpio_blue"  		=> {ARGCOUNT => ARGCOUNT_ONE}							
+							);
+
+#Lecture du fichier de configuration
+$config->file('/etc/smartcontrol.conf');
+
+#Initialisation des paramètres du daemon
+my $red = $config->gpio_red();
+my $green = $config->gpio_green();
+my $blue = $config->gpio_blue();
+
+#run only one instance of me:
+use Fcntl ':flock';
+open my $self, '<', $0 or die "Couldn't open self: $!";
+flock $self, LOCK_EX | LOCK_NB or exit (1);
+
+#Debut du script
+# eclairage: valeur min et max
+my $valeur_min = 0;
+my $valeur_max = 255;
+my $sleeptime = 176000;
+my ($k,$l);
+#cycle couleur blanche
+if ( $valeur_min < $valeur_max ) {
+	while (1) {
+		my $j= int(rand(14))+1;
+		$k= int(rand(255));
+
+		for (my $i=$valeur_min; $i<$valeur_max; $i+=$j)	{ 
+			$l = $j * 17;
+			`echo "p $red $i" >/dev/pigpio && echo "p $green $k" >/dev/pigpio && echo "p $blue $l" >/dev/pigpio`;
+			usleep($sleeptime);
+
+		}
+		for (my $i=$valeur_max; $i>$valeur_min; $i-=$j)	{ 
+			$l = $j * 17;
+			`echo "p $red $i" >/dev/pigpio && echo "p $green $k" >/dev/pigpio && echo "p $blue $l" >/dev/pigpio`;
+			usleep($sleeptime);
+
+		}
+	}
+}

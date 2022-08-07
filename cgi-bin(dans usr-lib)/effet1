@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Time::HiRes qw( usleep );
+use AppConfig qw(:expand :argcount);
+
+#Initialisation de la configuration
+my $config = AppConfig->new("gpio_red"    => {ARGCOUNT => ARGCOUNT_ONE},
+                            "gpio_green"  => {ARGCOUNT => ARGCOUNT_ONE},
+                            "gpio_blue"   => {ARGCOUNT => ARGCOUNT_ONE}							
+			   );
+
+#Lecture du fichier de configuration
+$config->file('/etc/smartcontrol.conf');
+
+#Initialisation des paramètres du daemon
+my $red = $config->gpio_red();
+my $green = $config->gpio_green();
+my $blue = $config->gpio_blue();
+
+#run only one instance of me:
+use Fcntl ':flock';
+open my $self, '<', $0 or die "Couldn't open self: $!";
+flock $self, LOCK_EX | LOCK_NB or exit (1);
+#use Time::HiRes qw ( usleep );
+
+#Debut du script
+# eclairage: valeur min et max
+my $valeur_min = 0;
+my $valeur_max = 255;
+my $sleeptime = 880000;
+
+# durée du cycle complet de changement de couleur en secondes (float)
+#my $lenght_cycle = 1;
+
+# durée d'une étape de cycle en millionieme de seconde
+#my $lenght_step = int (($lenght_cycle * 1000000) / ((($valeur_max - $valeur_min) + 1) * 6));
+
+#cycle couleur continu
+my @rgb = ( $valeur_max, $valeur_min, $valeur_min );
+while (1) {
+	if ( $rgb[0] == $valeur_max || $rgb[1] == $valeur_min || $rgb[2] == $valeur_min) { while ($rgb[1] < $valeur_max) { $rgb[1] += 1; `echo "p $red $rgb[0]" >/dev/pigpio && echo "p $green $rgb[1]" >/dev/pigpio && echo "p $blue $rgb[2]" >/dev/pigpio`; usleep($sleeptime);}} 
+	if ( $rgb[0] == $valeur_max || $rgb[1] == $valeur_max || $rgb[2] == $valeur_min) { while ($rgb[0] > $valeur_min) { $rgb[0] -= 1; `echo "p $red $rgb[0]" >/dev/pigpio && echo "p $green $rgb[1]" >/dev/pigpio && echo "p $blue $rgb[2]" >/dev/pigpio`; usleep($sleeptime);}} 
+	if ( $rgb[0] == $valeur_min || $rgb[1] == $valeur_max || $rgb[2] == $valeur_min) { while ($rgb[2] < $valeur_max) { $rgb[2] += 1; `echo "p $red $rgb[0]" >/dev/pigpio && echo "p $green $rgb[1]" >/dev/pigpio && echo "p $blue $rgb[2]" >/dev/pigpio`; usleep($sleeptime);}}
+	if ( $rgb[0] == $valeur_min || $rgb[1] == $valeur_max || $rgb[2] == $valeur_max) { while ($rgb[1] > $valeur_min) { $rgb[1] -= 1; `echo "p $red $rgb[0]" >/dev/pigpio && echo "p $green $rgb[1]" >/dev/pigpio && echo "p $blue $rgb[2]" >/dev/pigpio`; usleep($sleeptime);}}
+	if ( $rgb[0] == $valeur_min || $rgb[1] == $valeur_min || $rgb[2] == $valeur_max) { while ($rgb[0] < $valeur_max) { $rgb[0] += 1; `echo "p $red $rgb[0]" >/dev/pigpio && echo "p $green $rgb[1]" >/dev/pigpio && echo "p $blue $rgb[2]" >/dev/pigpio`; usleep($sleeptime);}}
+	if ( $rgb[0] == $valeur_max || $rgb[1] == $valeur_min || $rgb[2] == $valeur_max) { while ($rgb[2] > $valeur_min) { $rgb[2] -= 1; `echo "p $red $rgb[0]" >/dev/pigpio && echo "p $green $rgb[1]" >/dev/pigpio && echo "p $blue $rgb[2]" >/dev/pigpio`; usleep($sleeptime);}}
+}
+

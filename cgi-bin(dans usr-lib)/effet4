@@ -1,0 +1,61 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use DBI;
+use Time::HiRes qw ( usleep );
+use AppConfig qw(:expand :argcount);
+
+#Initialisation de la configuration
+my $config = AppConfig->new("gpio_red"    => {ARGCOUNT => ARGCOUNT_ONE},
+			    "gpio_green"       	=> {ARGCOUNT => ARGCOUNT_ONE},
+                            "gpio_blue"  		=> {ARGCOUNT => ARGCOUNT_ONE},
+			    "bdd_base"       	=> {ARGCOUNT => ARGCOUNT_ONE},
+                            "bdd_host"  		=> {ARGCOUNT => ARGCOUNT_ONE},
+                            "bdd_login"    		=> {ARGCOUNT => ARGCOUNT_ONE},
+                            "bdd_mdp"			=> {ARGCOUNT => ARGCOUNT_ONE},
+                            "bdd_table_leds"	=> {ARGCOUNT => ARGCOUNT_ONE}
+							);
+
+#Lecture du fichier de configuration
+$config->file('/etc/smartcontrol.conf');
+
+#Initialisation des paramètres du daemon
+my $red = $config->gpio_red();
+my $green = $config->gpio_green();
+my $blue = $config->gpio_blue();
+my $base = $config->bdd_base();
+my $host = $config->bdd_host();
+my $login = $config->bdd_login();
+my $mdp = $config->bdd_mdp();
+my $table = $config->bdd_table_leds();
+
+#run only one instance of me:
+use Fcntl ':flock';
+open my $self, '<', $0 or die "Couldn't open self: $!";
+flock $self, LOCK_EX | LOCK_NB or exit (1);
+
+#Debut du script
+my $rgb;
+my $dbd = DBI->connect("dbi:mysql:dbname=$base;host=$host;", $login, $mdp) or die 'Impossible de se connecter à la base de données :'.DBI::errstr;
+my $requete = 'SELECT rgb FROM '.$table.' WHERE id =\'1\'';
+my $prep = $dbd->prepare($requete) or die 'Impossible de préparer la requête : '.$dbd->errstr;
+$prep->execute or die 'Impossible d\'exécuter la requête : '.$prep->errstr;
+while (my $row = $prep->fetchrow_hashref) {
+	$rgb = $row->{rgb};
+}
+$prep->finish;
+$dbd->disconnect;
+	
+my ($r,$g,$b) = split (/,/, $rgb);
+my ($ir,$ig,$ib) = ((256-$r),(256-$g),(256-$b));
+while (1) {
+	for (my $i=20000; $i<=800000; $i*=1.5) {
+		`echo "p $red $r" >/dev/pigpio && echo "p $green $g" >/dev/pigpio && echo "p $blue $b" >/dev/pigpio`; usleep ($i);
+		`echo "p $red $ir" >/dev/pigpio && echo "p $green $ig" >/dev/pigpio && echo "p $blue $ib" >/dev/pigpio`; usleep ($i);
+	}
+	for (my $i=800000; $i>=20000; $i/=1.5) {
+		`echo "p $red $r" >/dev/pigpio && echo "p $green $g" >/dev/pigpio && echo "p $blue $b" >/dev/pigpio`; usleep ($i);
+		`echo "p $red $ir" >/dev/pigpio && echo "p $green $ig" >/dev/pigpio && echo "p $blue $ib" >/dev/pigpio`; usleep ($i);
+	}
+}

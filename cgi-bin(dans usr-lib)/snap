@@ -1,0 +1,104 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use DBI;
+use LWP::Simple;
+use AppConfig qw(:expand :argcount);
+
+#Initialisation de la configuration
+my $config = AppConfig->new(	
+				"gpio_detection"    	=> {ARGCOUNT => ARGCOUNT_NONE},
+				"gpio_red"    		=> {ARGCOUNT => ARGCOUNT_NONE},
+				"gpio_green"    	=> {ARGCOUNT => ARGCOUNT_NONE},
+				"gpio_blue"    		=> {ARGCOUNT => ARGCOUNT_NONE},
+				"bdd_base"       	=> {ARGCOUNT => ARGCOUNT_ONE},
+				"bdd_host"  		=> {ARGCOUNT => ARGCOUNT_ONE},
+				"bdd_login"    		=> {ARGCOUNT => ARGCOUNT_ONE},
+				"bdd_mdp"		=> {ARGCOUNT => ARGCOUNT_ONE},
+				"bdd_table_member"	=> {ARGCOUNT => ARGCOUNT_ONE},
+				"bdd_table_leds"	=> {ARGCOUNT => ARGCOUNT_NONE},
+				"bdd_table_meteo"	=> {ARGCOUNT => ARGCOUNT_NONE},
+				"bdd_table_pir" 	=> {ARGCOUNT => ARGCOUNT_NONE},
+				"bdd_table_security"	=> {ARGCOUNT => ARGCOUNT_ONE},
+				"port" 			=> {ARGCOUNT => ARGCOUNT_ONE},
+				"data_dir"		=> {ARGCOUNT => ARGCOUNT_ONE},
+				"temp_pir_dir"		=> {ARGCOUNT => ARGCOUNT_NONE},
+				"temp_capture_file"	=> {ARGCOUNT => ARGCOUNT_NONE},
+				"cgi_dir"		=> {ARGCOUNT => ARGCOUNT_NONE},
+				"data_period"		=> {ARGCOUNT => ARGCOUNT_NONE},
+				"histo_alerte_email"		=> {ARGCOUNT => ARGCOUNT_ONE},
+				"meteo_openweathermap_APPID"	=> {ARGCOUNT => ARGCOUNT_NONE},
+				"meteo_openweathermap_CityID" => {ARGCOUNT => ARGCOUNT_NONE}
+				);
+
+#Lecture du fichier de configuration
+$config->file('/etc/smartcontrol.conf');
+
+#Initialisation des paramètres du daemon
+my $base = $config->bdd_base();
+my $host = $config->bdd_host();
+my $login = $config->bdd_login();
+my $mdp = $config->bdd_mdp();
+my $table_membre = $config->bdd_table_member();
+my $table_securite = $config->bdd_table_security();
+my $historique_email = $config->histo_alerte_email();
+my $port = $config->port();
+my $mediaPath  = $config->data_dir();
+$mediaPath  .= 'image/snap/';
+
+my $snapshot = 'http://localhost:'.$port.'/0/action/snapshot';
+get $snapshot;
+
+my $email = alerte_email();
+my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) = localtime(time);
+my $dateAlert = sprintf "%02d-%02d-%4d %02d:%02d:%02d", $mday, $mon + 1, $year + 1900, $hour, $min, $sec;
+opendir(DIR, $mediaPath);
+my @files;
+while (1) {
+	last if (@files);
+	sleep 1;
+	@files = grep { /Photo\.jpg$/ } readdir(DIR); 
+}
+closedir(DIR);
+	
+`mpack -s "Smart Control: Intrusion le $dateAlert" $mediaPath$files[0] $email`;
+	
+foreach (@files) {
+	unlink $mediaPath.$_;
+}
+
+maj_bdd();
+
+
+
+#sub pour l'envoi d'email
+sub alerte_email {
+	#on recupere l'email dans la bdd
+	my $e_mail;
+	my $dbd = DBI->connect("dbi:mysql:dbname=$base;host=$host;", $login, $mdp) or die 'Impossible de se connecter à la base de données :'.DBI::errstr;
+	my $requete = 'SELECT email FROM '.$table_membre.'';
+	my $prep = $dbd->prepare($requete) or die 'Impossible de préparer la requête : '.$dbd->errstr;
+	$prep->execute or die 'Impossible d\'exécuter la requête : '.$prep->errstr;
+	my $tableau_valeurs = $prep->fetchall_arrayref(); #list of list, voir http://perlmonks.org/?node_id=284436#lol
+	$prep->finish;
+	for my $tableau_valeurs ( @$tableau_valeurs ) {
+		my @fields = @$tableau_valeurs;
+		if ($fields[0]) {
+			$e_mail = $fields[0];
+			$e_mail =~ s/\@/\\@/g;
+		}
+	}
+	$dbd->disconnect;
+	return $e_mail;
+}
+
+#mise à jour bdd pour garder les x derniers emails
+sub maj_bdd {
+	my $dbd = DBI->connect("dbi:mysql:dbname=$base;host=$host;", $login, $mdp) or logEntry('maj_bdd : Impossible de se connecter à la base de données :'.DBI::errstr);
+	my $requete = 'DELETE FROM '.$table_securite.' WHERE id NOT IN ( SELECT id FROM ( SELECT id FROM '.$table_securite.' WHERE file_type = \'2\' ORDER BY id DESC LIMIT '.$historique_email.' ) foo ) AND file_type = \'2\'';
+	my $prep = $dbd->prepare($requete) or logEntry('maj_bdd : Impossible de préparer la requête : '.$dbd->errstr);
+	$prep->execute or logEntry('maj_bdd : Impossible d\'exécuter la requête : '.$prep->errstr);
+	$prep->finish;
+	$dbd->disconnect;
+}

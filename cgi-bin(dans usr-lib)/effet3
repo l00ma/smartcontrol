@@ -1,0 +1,54 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Time::HiRes qw( usleep );
+use AppConfig qw(:expand :argcount);
+
+#Initialisation de la configuration
+my $config = AppConfig->new("gpio_red"    => {ARGCOUNT => ARGCOUNT_ONE},
+							"gpio_green"       	=> {ARGCOUNT => ARGCOUNT_ONE},
+                            "gpio_blue"  		=> {ARGCOUNT => ARGCOUNT_ONE}							
+							);
+
+#Lecture du fichier de configuration
+$config->file('/etc/smartcontrol.conf');
+
+#Initialisation des paramètres du daemon
+my $red = $config->gpio_red();
+my $green = $config->gpio_green();
+my $blue = $config->gpio_blue();
+
+#run only one instance of me:
+use Fcntl ':flock';
+open my $self, '<', $0 or die "Couldn't open self: $!";
+flock $self, LOCK_EX | LOCK_NB or exit (1);
+
+#Debut du script
+# eclairage: valeur min et max
+my $valeur_min = 1;
+#my $valeur_max = 255;
+#cycle couleur
+while (1) {
+	my $j= int(rand(254))+1;
+	my $k= int(rand(254))+1;
+	my $l= int(rand(254))+1;
+
+	push my @unsorted, ($j, $k, $l) ;
+	my @sorted = sort { $a <=> $b } @unsorted ;
+
+	for (my $i=$valeur_min; $i<$sorted[0]; $i=$i+2)	{ 
+		my $r= int($unsorted[0]/$i);
+		my $g= int($unsorted[1]/$i);
+		my $b= int($unsorted[2]/$i);
+		`echo "p $red $r" >/dev/pigpio && echo "p $green $g" >/dev/pigpio && echo "p $blue $b" >/dev/pigpio `;
+		usleep(10000);
+	}
+	for (my $i=$sorted[0]; $i>$valeur_min; $i=$i-2)	{ 
+		my $r= int($unsorted[0]/$i);
+		my $g= int($unsorted[1]/$i);
+		my $b= int($unsorted[2]/$i);
+		`echo "p $red $r" >/dev/pigpio && echo "p $green $g" >/dev/pigpio && echo "p $blue $b" >/dev/pigpio `;
+		usleep(10000);
+	}
+}
