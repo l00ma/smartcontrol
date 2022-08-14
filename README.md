@@ -17,6 +17,7 @@ Temperature sensor charts:
 <img src=https://user-images.githubusercontent.com/26147769/183503591-53e28691-70f4-4a85-a667-01c7d85bcd52.png><br />
 <br>
 Led light-strip color control:
+<br>
 <img src=https://user-images.githubusercontent.com/26147769/183503602-a92478f4-5a2d-4136-aadb-c8285023b236.png><br />
 <br>
 Led light-strip pattern choice:
