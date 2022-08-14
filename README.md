@@ -21,7 +21,9 @@ Led light-strip color control:
 <img src=https://user-images.githubusercontent.com/26147769/183503602-a92478f4-5a2d-4136-aadb-c8285023b236.png><br />
 <br>
 Led light-strip pattern choice:
+<br>
 <img src=https://user-images.githubusercontent.com/26147769/183503629-90739d43-449c-4731-8787-4f1c479d3c73.png><br />
 <br>
 led light-strip timer:
+<br>
 <img src=https://user-images.githubusercontent.com/26147769/183503644-8eb12ef9-7a13-4744-ad0d-9e0421c1c0c2.png><br />
