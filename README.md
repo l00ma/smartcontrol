@@ -2,7 +2,7 @@
 web interface for my home automation project<br>
 <br><br>
 Homepage:
-<img src=https://user-images.githubusercontent.com/26147769/183503441-5da8a808-bf83-4add-9910-46cd14a7f39e.png><br />
+<img src=https://user-images.githubusercontent.com/26147769/189451928-a67ce50d-f80e-4660-8677-71830e2923f5.png><br />
 <br>
 Motion detection:
 <img src=https://user-images.githubusercontent.com/26147769/183503557-2d078b8b-3387-4c55-aaf1-16534c984ca1.png><br />
