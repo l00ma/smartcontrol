@@ -5,7 +5,7 @@ Homepage:
 <img src=https://user-images.githubusercontent.com/26147769/189451928-a67ce50d-f80e-4660-8677-71830e2923f5.png><br />
 <br>
 Motion detection:
-<img src=https://user-images.githubusercontent.com/26147769/183503557-2d078b8b-3387-4c55-aaf1-16534c984ca1.png><br />
+<img src=https://user-images.githubusercontent.com/26147769/189452247-de0ac433-02ba-463c-a083-5616d1377ad0.png><br />
 <br>
 Recorded video detections:
 <img src=https://user-images.githubusercontent.com/26147769/183503571-8de5b802-e187-47c2-ae23-b21cd817b516.png><br />
