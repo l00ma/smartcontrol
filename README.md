@@ -1,19 +1,26 @@
 # SmartControl
-web interface for my home automation project<br>
+Web app managing my home automation project on a Raspberry Pi<br>
+Project coded in pure PHP and JS/Jquery.<br>
+<br>
+### Features:<br>
+-Weather forecast<br>
+-Presence detection sensor and camera<br>
+-Temperature sensors<br>
+-Ledstrip power and color manager<br>
 <br><br>
 Homepage:
 <img src=https://user-images.githubusercontent.com/26147769/189451928-a67ce50d-f80e-4660-8677-71830e2923f5.png><br />
 <br>
-Motion detection:
+Presence detection sensor and panel:
 <img src=https://user-images.githubusercontent.com/26147769/189452247-de0ac433-02ba-463c-a083-5616d1377ad0.png><br />
 <br>
-Recorded video detections:
+Recorded videos:
 <img src=https://user-images.githubusercontent.com/26147769/183503571-8de5b802-e187-47c2-ae23-b21cd817b516.png><br />
 <br>
 Live Camera:
 <img src=https://user-images.githubusercontent.com/26147769/183503580-54221051-ef27-440f-b71c-41021939d674.png><br />
 <br>
-Temperature sensor charts:
+Temperature sensors charts (3 sensors):
 <img src=https://user-images.githubusercontent.com/26147769/183503591-53e28691-70f4-4a85-a667-01c7d85bcd52.png><br />
 <br>
 Led light-strip color control:
